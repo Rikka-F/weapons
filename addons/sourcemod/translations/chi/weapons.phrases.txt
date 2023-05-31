@@ -436,4 +436,12 @@
 	{
 		"chi"	"重置图案模板"
 	}
+	"weapon_knife_ghost"
+	{
+		"chi"	"★ 幽灵匕首"
+	}
+	"weapon_knifegg"
+	{
+		"chi"	"★ 黄金匕首"
+	}
 }
