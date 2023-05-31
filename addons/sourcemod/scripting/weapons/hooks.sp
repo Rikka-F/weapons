@@ -36,7 +36,7 @@ Action GiveNamedItemPre(int client, char classname[64], CEconItemView &item, boo
 			ignoredCEconItemView = true;
 			if (g_iKnife[client] == -1)
 			{
-				strcopy(classname, sizeof(classname), g_WeaponClasses[GetRandomKnife()]);
+				strcopy(classname, sizeof(classname), g_WeaponClasses[GetRandomKnife(client)]);
 			}
 			else
 			{
@@ -58,6 +58,11 @@ void GiveNamedItemPost(int client, const char[] classname, const CEconItemView i
 			if (IsKnifeClass(classname))
 			{
 				EquipPlayerWeapon(client, entity);
+			}
+			else if (IsSpecialKnifeClass(classname))
+			{
+				// Doesn't use EquipPlayerWeapon because server hangs when player spawns
+				FakeClientCommand(client, "use weapon_knife");
 			}
 			SetWeaponProps(client, entity);
 		}

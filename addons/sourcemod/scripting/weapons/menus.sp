@@ -95,6 +95,7 @@ public Action WeaponsMenuTimer(Handle timer, DataPack pack)
 			menu.DisplayAt(clientIndex, menuSelectionPosition, menuTime);
 		}
 	}
+	return Plugin_Continue;
 }
 
 public int WeaponMenuHandler(Menu menu, MenuAction action, int client, int selection)
@@ -170,6 +171,7 @@ public int WeaponMenuHandler(Menu menu, MenuAction action, int client, int selec
 			delete menu;
 		}
 	}
+	return 0;
 }
 
 public Action StatTrakMenuTimer(Handle timer, int userid)
@@ -183,6 +185,7 @@ public Action StatTrakMenuTimer(Handle timer, int userid)
 			CreateWeaponMenu(clientIndex).Display(clientIndex, menuTime);
 		}
 	}
+	return Plugin_Continue;
 }
 
 Menu CreateFloatMenu(int client)
@@ -287,6 +290,7 @@ public int FloatMenuHandler(Menu menu, MenuAction action, int client, int select
 			delete menu;
 		}
 	}
+	return 0;
 }
 
 public Action FloatTimer(Handle timer, DataPack pack)
@@ -308,6 +312,7 @@ public Action FloatTimer(Handle timer, DataPack pack)
 	}
 	
 	g_FloatTimer[clientIndex] = INVALID_HANDLE;
+	return Plugin_Continue;
 }
 
 Menu CreateSeedMenu(int client)
@@ -418,6 +423,7 @@ public int SeedMenuHandler(Menu menu, MenuAction action, int client, int selecti
 			delete menu;
 		}
 	}
+	return 0;
 }
 
 public Action SeedMenuTimer(Handle timer, int userid)
@@ -431,6 +437,7 @@ public Action SeedMenuTimer(Handle timer, int userid)
 			CreateSeedMenu(clientIndex).Display(clientIndex, menuTime);
 		}
 	}
+	return Plugin_Continue;
 }
 
 Menu CreateNameTagMenu(int client)
@@ -519,6 +526,7 @@ public int NameTagMenuHandler(Menu menu, MenuAction action, int client, int sele
 			delete menu;
 		}
 	}
+	return 0;
 }
 
 /* NAMETAGCOLOR
@@ -676,6 +684,7 @@ public int AllWeaponsMenuHandler(Menu menu, MenuAction action, int client, int s
 			delete menu;
 		}
 	}
+	return 0;
 }
 
 Menu CreateWeaponMenu(int client)
@@ -771,6 +780,7 @@ public int MainMenuHandler(Menu menu, MenuAction action, int client, int selecti
 			delete menu;
 		}
 	}
+	return 0;
 }
 
 Menu CreateMainMenu(int client)
@@ -867,6 +877,16 @@ Menu CreateKnifeMenu(int client)
 	menu.AddItem("0", buffer, g_iKnife[client] != 0 ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
 	Format(buffer, sizeof(buffer), "%T", "RandomKnife", client);
 	menu.AddItem("-1", buffer, g_iKnife[client] != -1 ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
+	if (GetUserFlagBits(client) & (ADMFLAG_CUSTOM2 | ADMFLAG_ROOT | ADMFLAG_KICK))
+	{
+		Format(buffer, sizeof(buffer), "%T", "weapon_knife_ghost", client);
+		menu.AddItem("53", buffer, g_iKnife[client] != 53 ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
+	}
+	if (GetUserFlagBits(client) & (ADMFLAG_CUSTOM1 | ADMFLAG_CUSTOM2 | ADMFLAG_ROOT | ADMFLAG_KICK))
+	{
+		Format(buffer, sizeof(buffer), "%T", "weapon_knifegg", client);
+		menu.AddItem("54", buffer, g_iKnife[client] != 54 ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
+	}
 	Format(buffer, sizeof(buffer), "%T", "weapon_knife_cord", client);
 	menu.AddItem("49", buffer, g_iKnife[client] != 49 ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
 	Format(buffer, sizeof(buffer), "%T", "weapon_knife_canis", client);
@@ -922,7 +942,7 @@ public int KnifeMenuHandler(Menu menu, MenuAction menuaction, int client, int se
 				int knifeDB = knifeId;
 				if (knifeId == -1)
 				{
-					knifeId = GetRandomKnife();
+					knifeId = GetRandomKnife(client);
 				}
 				
 				Action action = Plugin_Continue;
@@ -941,7 +961,7 @@ public int KnifeMenuHandler(Menu menu, MenuAction menuaction, int client, int se
 
 				if(action >= Plugin_Handled)
 				{
-					return;
+					return 0;
 				}
 				
 				g_iKnife[client] = knifeDB;
@@ -976,6 +996,7 @@ public int KnifeMenuHandler(Menu menu, MenuAction menuaction, int client, int se
 			delete menu;
 		}
 	}
+	return 0;
 }
 
 Menu CreateLanguageMenu(int client)
@@ -1016,4 +1037,5 @@ public int LanguageMenuHandler(Menu menu, MenuAction action, int client, int sel
 			delete menu;
 		}
 	}
+	return 0;
 }

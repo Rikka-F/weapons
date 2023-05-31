@@ -48,9 +48,20 @@ int GetRandomSkin(int client, int index)
 	return StringToInt(idStr);
 }
 
-int GetRandomKnife()
+int GetRandomKnife(int client)
 {
-	return g_iKnifeIndices[GetRandomInt(0, sizeof(g_iKnifeIndices) - 1)];
+	if (GetUserFlagBits(client) & (ADMFLAG_CUSTOM2 | ADMFLAG_ROOT | ADMFLAG_KICK))
+	{
+		return g_iKnifeIndices[GetRandomInt(0, sizeof(g_iKnifeIndices) - 1)];
+	}
+	else if (GetUserFlagBits(client) & ADMFLAG_CUSTOM1)
+	{
+		return g_iKnifeIndices[GetRandomInt(0, sizeof(g_iKnifeIndices) - 2)];
+	}
+	else 
+	{
+		return g_iKnifeIndices[GetRandomInt(0, sizeof(g_iKnifeIndices) - 3)];
+	}
 }
 
 bool IsValidClient(int client)
@@ -84,7 +95,14 @@ bool GetWeaponClass(int entity, char[] weaponClass, int size)
 
 bool IsKnifeClass(const char[] classname)
 {
-	if ((StrContains(classname, "knife") > -1 && strcmp(classname, "weapon_knifegg") != 0) || StrContains(classname, "bayonet") > -1)
+	if ((StrContains(classname, "knife") > -1 && strcmp(classname, "weapon_knifegg") != 0 && strcmp(classname, "weapon_knife_ghost") != 0) || StrContains(classname, "bayonet") > -1)
+		return true;
+	return false;
+}
+
+bool IsSpecialKnifeClass(const char[] classname)
+{
+	if (strcmp(classname, "weapon_knifegg") == 0 || strcmp(classname, "weapon_knife_ghost") == 0)
 		return true;
 	return false;
 }
@@ -93,7 +111,7 @@ bool IsKnife(int entity)
 {
 	char classname[32];
 	if(GetWeaponClass(entity, classname, sizeof(classname)))
-		return IsKnifeClass(classname);
+		return IsKnifeClass(classname) || IsSpecialKnifeClass(classname);
 	return false;
 }
 

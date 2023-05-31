@@ -139,6 +139,15 @@ public void OnPluginStart()
 	}
 }
 
+public void OnMapStart()
+{
+	AddFileToDownloadsTable("materials/panorama/images/icons/equipment/knife_ghost.svg");
+	AddFileToDownloadsTable("models/weapons/w_knife_ghost_dropped.vvd");
+	AddFileToDownloadsTable("models/weapons/w_knife_ghost_dropped.phy");
+	AddFileToDownloadsTable("models/weapons/w_knife_ghost_dropped.mdl");
+	AddFileToDownloadsTable("models/weapons/w_knife_ghost_dropped.dx90.vtx");
+}
+
 public void OnLibraryAdded(const char[] name)
 {
 	if (StrEqual(name, "updater"))
@@ -358,7 +367,7 @@ void RefreshWeapon(int client, int index, bool defaultKnife = false)
 		if (IsValidWeapon(weapon))
 		{
 			bool isKnife = IsKnife(weapon);
-			if ((!defaultKnife && GetWeaponIndex(weapon) == index) || (isKnife && (defaultKnife || IsKnifeClass(g_WeaponClasses[index]))))
+			if ((!defaultKnife && GetWeaponIndex(weapon) == index) || (isKnife && (defaultKnife || IsKnifeClass(g_WeaponClasses[index]) || IsSpecialKnifeClass(g_WeaponClasses[index]))))
 			{
 				if(!g_bOverwriteEnabled)
 				{
@@ -426,4 +435,5 @@ public Action ReserveAmmoTimer(Handle timer, DataPack pack)
 	{
 		SetEntData(clientIndex, offset, ammo, 4, true);
 	}
+	return Plugin_Continue;
 }
